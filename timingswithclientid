@@ -1,0 +1,35 @@
+select 
+SectionTypesLookup.Name as "Section",
+
+Timers.Name as "Name",
+
+Timings.AgentId as "AgentId",substr(Message,instr(logs.Message,"Client")+7,7) as Client,
+
+round(avg((Timings.FinishTime - Timings.StartTime) / 1000.0),3) as "Avg. Resp. Time"
+
+
+from Timers,
+Timings,
+Sections,
+SectionTypesLookup
+join logs on logs.SectionId=Timers.SectionId
+
+where Timers.TimerId=Timings.TimerId
+
+and Timers.SectionId=Sections.SectionId
+
+and Sections.SectionTypeId=SectionTypesLookup.SectionTypeId
+
+
+group by Timers.SectionId, 
+Timers.Name, 
+Timings.AgentId,
+substr(Message,instr(logs.Message,"Client")+7,7) 
+
+
+
+order by 
+substr(Message,instr(logs.Message,"Client")+7,7) ,
+Timers.SectionId, 
+Timers.Name, 
+Timings.AgentId;
