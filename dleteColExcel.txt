@@ -1,0 +1,13 @@
+Sub deleteCol()
+Dim c As Range
+Dim str As String
+
+str = "Failure"
+
+For Each c In ActiveSheet.UsedRange
+    If InStr(c.Value, str) > 0 Then
+    c.EntireColumn.Delete shift:=xlToLeft
+    End If
+Next c
+
+End Sub
